@@ -1,0 +1,27 @@
+name: New Relic Change Tracking
+run-name: Deploy ${{ github.ref }} by @${{ github.actor }}
+
+on:
+  pull_request:
+    branches: main
+    types: closed
+
+jobs:
+  change-tracking:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -euo pipefail {0}
+    steps:
+      - name: Set release version from commit sha
+        run: |
+          echo "RELEASE_VER=${{ github.sha }}" >> $GITHUB_ENV
+      - name: Draw a deploy marker
+        uses: newrelic/deployment-marker-action@v2
+        with:
+          guid: ${{ secrets.NEW_RELIC_DEPLOYMENT_ENTITY_GUID }}
+          apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
+          version: ${{ env.RELEASE_VER }}
+          user: ${{ github.actor }}
+          deepLink: "${{ github.repository }}/commit/${{ env.RELEASE_VER }}"
