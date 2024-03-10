@@ -18,7 +18,7 @@ jobs:
         run: |
           echo "RELEASE_VER=${{ github.sha }}" >> $GITHUB_ENV
       - name: Draw a deploy marker
-        uses: newrelic/deployment-marker-action@v2
+        uses: newrelic/deployment-marker-action@v2.5.0
         with:
           guid: ${{ secrets.NEW_RELIC_DEPLOYMENT_ENTITY_GUID }}
           apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
