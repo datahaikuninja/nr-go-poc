@@ -24,4 +24,4 @@ jobs:
           apiKey: ${{ secrets.NEW_RELIC_API_KEY }}
           version: ${{ env.RELEASE_VER }}
           user: ${{ github.actor }}
-          deepLink: "${{ github.repository }}/commit/${{ env.RELEASE_VER }}"
+          deepLink: "https://github.com/${{ github.repository }}/commit/${{ env.RELEASE_VER }}"
