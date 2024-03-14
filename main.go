@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
+	"time"
 
 	"golang.org/x/net/html"
 
@@ -42,6 +44,12 @@ func main() {
 	fmt.Println("initialize newrelic APM successfuly")
 
 	http.HandleFunc(newrelic.WrapHandleFunc(app, "/foo", func(w http.ResponseWriter, r *http.Request) {
+		rand.NewSource(time.Now().UnixNano())
+		n := rand.Intn(200)
+		fmt.Printf("Sleeping %d micro seconds...\n", n)
+		time.Sleep(time.Duration(n) * time.Microsecond)
+		fmt.Println("Done")
+
 		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 	}))
 	log.Fatal(http.ListenAndServe(":8080", nil))
