@@ -49,7 +49,16 @@ func main() {
 		rand.NewSource(time.Now().UnixNano())
 		n := rand.Intn(200)
 		if n > 50 {
-			txn.NoticeError(fmt.Errorf("oversleep. n=%d", n))
+			txn.NoticeError(
+				newrelic.Error{
+					Message: fmt.Sprintf("oversleep. n=%d", n),
+					Class:   "oversleep",
+					Attributes: map[string]interface{}{
+						"intAttr": 1,
+						"strAttr": "foo",
+					},
+				},
+			)
 		}
 
 		fmt.Printf("Sleeping %d micro seconds...\n", n)
