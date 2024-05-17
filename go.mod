@@ -1,6 +1,6 @@
 module github.com/datahaikuninja/nr-go-poc
 
-go 1.21.8
+go 1.21.10
 
 require (
 	github.com/newrelic/go-agent/v3 v3.30.0

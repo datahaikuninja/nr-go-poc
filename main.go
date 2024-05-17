@@ -44,8 +44,14 @@ func main() {
 	fmt.Println("initialize newrelic APM successfuly")
 
 	http.HandleFunc(newrelic.WrapHandleFunc(app, "/foo", func(w http.ResponseWriter, r *http.Request) {
+		txn := newrelic.FromContext(r.Context())
+
 		rand.NewSource(time.Now().UnixNano())
 		n := rand.Intn(200)
+		if n > 50 {
+			txn.NoticeError(fmt.Errorf("oversleep. n=%d", n))
+		}
+
 		fmt.Printf("Sleeping %d micro seconds...\n", n)
 		time.Sleep(time.Duration(n) * time.Microsecond)
 		fmt.Println("Done")
